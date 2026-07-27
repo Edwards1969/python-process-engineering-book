@@ -12,7 +12,7 @@ print(A)
 print("Formato: ", A.shape)
 
 """
-3.2.1 Criado arrays  pág. 44
+3.2.1 Criando arrays  pág. 44
 """
 a = np.array([1, 2, 3, 4])
 

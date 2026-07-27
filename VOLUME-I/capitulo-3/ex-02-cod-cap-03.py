@@ -1,5 +1,5 @@
 """
-3.2.2 Funç~ies de criação de arrays - pág. 45
+3.2.2 Funções de criação de arrays - pág. 45
 """
 import numpy as np
 
@@ -58,7 +58,7 @@ print(a[3])  # quarto elemento
 print(a[-1]) # último elemento
 
 """
-3.3.2 Fatiamentento (slicing)
+3.3.2 Fatiamento (slicing)
 """
 a = np.array([10, 20, 30, 40, 50,  60])
 b = a[1:4]  # elemento dos índices 1, 2, e 3-> [20, 30, 40]
@@ -66,7 +66,7 @@ c = a[:3]   # primeiros três elementos -> [10, 20, 30]
 e = a[::2]  # elementos com passo 2 -> [10, 30, 50]
 
 """
-3.3.3 Indexaçãoi em arrays mlultidimensionais - pág.49
+3.3.3 Indexação em arrays multidimensionais - pág.49
 """
 M = np.array([
     [1, 2, 3],
@@ -79,7 +79,7 @@ coluna = M[:, 2]    # terceira coluna
 bloco = M[0:2, 1:3] # submatriz
 
 """
-3.3.4 Máscaras bolloleanas - pág. 49
+3.3.4 Máscaras boleanas - pág. 49
 """
 
 v = np.array([5, 12, 7, 20, 3])

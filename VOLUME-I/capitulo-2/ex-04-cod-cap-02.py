@@ -1,5 +1,5 @@
 """
-Laço While - pãgina 35
+Laço While - página 35
 """
 temperatura = 70 # C
 

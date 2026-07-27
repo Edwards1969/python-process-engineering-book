@@ -1,5 +1,5 @@
 """
-2.4.1 O laço for pág 35
+2.4.1 O laço for - pág 35
 """
 massa = 2.0 # Kg
 
