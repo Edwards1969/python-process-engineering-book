@@ -1,5 +1,5 @@
 """"
-Exemplo: Classificação de Esforço Mecânico.
+Exemplo: Classificação de Esforço Mecânico. pág.33
 """
 
 forca = 350 # N
