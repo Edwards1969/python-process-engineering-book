@@ -1,5 +1,6 @@
 """
 3.1.3 Arrays multidimensionais  - pag. 44
+
 """
 import numpy as np
 
@@ -13,6 +14,7 @@ print("Formato: ", A.shape)
 
 """
 3.2.1 Criando arrays  pág. 44
+
 """
 a = np.array([1, 2, 3, 4])
 
