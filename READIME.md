@@ -184,14 +184,16 @@ Provide a solid foundation for students, engineers, and researchers who want to 
 
 ## 📬 Contato / Contact
 
-Para dúvidas, sugestões ou contribuições:
+Para dúvidas, sugestões ou contribuições, utilize a seção **Issues** deste repositório.
 
-**Autor:** Elilton Edwards  
-**GitHub:** https://github.com/Edwards1969  
+Autor: Elilton Edwards
+
+GitHub: https://github.com/Edwards1969
 
 ---
 
-For questions, suggestions, or contributions:
+For questions, suggestions, or contributions, please use the **Issues** section of this repository.
 
-**Author:** Elilton Edwards    
-**GitHub:** https://github.com/Edwards1969
+Author: Elilton Edwards
+
+GitHub: https://github.com/Edwards1969
