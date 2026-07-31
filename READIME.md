@@ -116,6 +116,22 @@ Com essa configuração, arquivos auxiliares (como arquivos CSV, imagens e outro
 >
 > Todos os códigos deste repositório foram mantidos exatamente como publicados nos livros. A configuração acima garante que os exemplos possam ser executados sem necessidade de alterar caminhos para arquivos ou adaptar o código ao ambiente de desenvolvimento.
 
+"""
+Observação
+
+Se o programa gerar o erro:
+
+FileNotFoundError: [Errno 2] No such file or directory
+
+verifique se o arquivo "dados_experimento.csv" está localizado na mesma
+pasta do programa Python.
+
+Caso utilize o Visual Studio Code, consulte a seção
+"Configuração do Ambiente (Environment Setup)" no README.md do repositório,
+onde é apresentada a configuração recomendada para executar todos os exemplos
+deste livro.
+"""
+
 ---
 
 ## ⚙️ Environment Setup
