@@ -1,6 +1,6 @@
 """
 
-6.5.1 Integrais indefinidas. - 160-161
+6.5.1 Integrais indefinidas. - pág. 160-161
 
 """
 from sympy import symbols, integrate
