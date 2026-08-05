@@ -34,14 +34,12 @@ termos imaginários residuais como 0.j ou valores muito pequenos (ex.: 1e-16j)
 que surgem por arredondamento numérico.
 
 Assim, np.sqrt(valores_p.real) garante que estamos calculando frequências
-naturais fisicamente válidas.exit
-
+naturais fisicamente válidas.
 
 Exemplo:
 z = 3 + 4j
 print(z.real)   # 3
 print(z.imag)   # 4
-
 """
 print(f"Frequências Naturais: {frequencias} rad/s")
 print(f"\nModos de Vibração (Autovetores): ")
