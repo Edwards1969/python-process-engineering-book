@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 f = 45
-fs = 90   # Nyquist
+fs = 90   # Nyquist -> Frequência de Amostragem.
 t = np.linspace(0, 0.1, 2000)
 s = np.sin(2*np.pi*f*t)
 

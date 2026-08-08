@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-Exercício 2: Um sinal de 10 Hz é amostrado a 12 Hz - pág. 229-231
+Exercício 1: Um sinal de 10 Hz é amostrado a 12 Hz - pág. 229-231
 
 """
 import numpy as np
