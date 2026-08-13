@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['VOLUME-II\\capitulo-1\\ex-04-cod-cap-01.py', 'VOLUME-II\\capitulo-1\\ex-05-cod-cap-01.py']
+recent_files = ['VOLUME-II\\capitulo-2\\ex-04-cod-cap-02.py', 'VOLUME-II\\capitulo-2\\ex-05-cod-cap-02.py', 'VOLUME-II\\capitulo-2\\ex-06-cod-cap-02.py']
 
 [main]
 version = 0.2.0

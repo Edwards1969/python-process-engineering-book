@@ -9,12 +9,13 @@ import matplotlib.pyplot as plt
 
 def simulador_limites(u, u_min, u_max, delta):
 	u_saida = np.copy(u)
+
 	# Aplicando Zona Morta (Deadband)
-    
 	u_saida[np.abs(u_saida) < delta] = 0
+
 	# Aplicando Saturacao
-    
 	u_saida = np.clip(u_saida, u_min, u_max)
+	
 	return u_saida
 
 # Gerando um sinal de rampa para ver a transicao clara
