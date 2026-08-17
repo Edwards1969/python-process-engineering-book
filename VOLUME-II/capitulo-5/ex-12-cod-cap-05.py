@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-5.6.3 Simulação de Sensores Pt100. pág. 296
+5.6.3 Simulação de Sensores Pt100. pág. 296 -267
 
 """
 import numpy as np

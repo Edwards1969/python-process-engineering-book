@@ -42,6 +42,7 @@ tabela_termopar = pd.DataFrame({
 tabela_termopar
 
 # Exercício Avançado 1: Métricas Metrológicas - pág. 294
+
 tabela_termopar["Erro_C"] = (
 	tabela_termopar["T_real_C"] -
 	tabela_termopar["T_sensor_C"]
