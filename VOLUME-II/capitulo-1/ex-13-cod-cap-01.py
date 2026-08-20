@@ -1,69 +1,60 @@
 # -*- coding: utf-8 -*-
 """
 
-1.10.2 Estudo de Caso: Controle de Nível em um Separadorde Produção.
+1.10.3 Controle de Nível em Tanque de Primeira Ordem (Não Linear).  -  pág.45
 
 """
 import numpy as np
 import matplotlib.pyplot as plt
-# --- Parametros do Separador e Simulacao ---
-Area = 5.0          # Area transversal do separador (m2)
+# --- Parametros do Tanque ---
+A = 2.0             # Area da secao transversal (m2)
+C = 0.5             # Coeficiente de descarga (m^2.5/s)	
 dt = 0.1            # Passo de tempo (s)
-tempo = np.arange(0, 300, dt)
-SP = 2.5            # Setpoint de nivel (m)
-U_MAX = 20.0        # Vazao maxima da valvula de saida (m3/s)
-def simular_separador(Kp, Ki, Kd):
-	h = 2.0             # Nivel inicial (m)
+tempo = np.arange(0, 400, dt)
+SP = 3.0            # Setpoint de nivel (m)
+def simular_tanque_gravidade(Kp, Ki, Kd):
+	h = 0.5             # Nivel inicial (m)
 	erro_anterior = SP - h
 	integral_erro = 0.0
 	lista_h = []
-	lista_u = []
+	lista_q_in = []
 	for t in tempo:
-		# 1. Definicao da Perturbacao (Golfada de liquido em t = 100s)
-		q_in = 5.0 if t < 100 else 12.0
-		# 2. Algoritmo PID com Anti-Windup (Clamping)
+		# 1. Algoritmo PID com Clamping (Anti-Windup)
 		erro = SP - h
 		u_p = Kp * erro
 		u_d = Kd * (erro - erro_anterior) / dt
 		u_i_tentativa = integral_erro + (Ki * erro * dt)
-		u_calc = u_p + u_i_tentativa + u_d
-		# Logica de Clamping: so integra se nao estiver saturado
-		if 0 < u_calc < U_MAX:
+		q_calc = u_p + u_i_tentativa + u_d
+		# Limite fisico da bomba de entrada (0 a 2.0 m3/s)
+		q_in = np.clip(q_calc, 0, 2.0)
+		# Logica de Clamping
+		if q_in == q_calc:
 			integral_erro = u_i_tentativa
-		u_final = np.clip(u_calc, 0, U_MAX)
-		# 3. Dinamica do Processo (Balanço de Massa: dh/dt = (qin - qout) / Area)
-		# Note que a valvula de saida (u_final) retira liquido (sinal negativo)
-		dh_dt = (q_in - u_final) / Area
+		# 2. Dinamica do Processo (Nao Linear)
+		# dh/dt = (qin - C*sqrt(h)) / A
+		dh_dt = (q_in - C * np.sqrt(max(h, 0))) / A
 		h = h + dh_dt * dt
-		# Garantir limites fisicos do tanque (vazio ou transbordando)
-		h = max(0, min(h, 5.0)) 
 		lista_h.append(h)
-		lista_u.append(u_final)
+		lista_q_in.append(q_in)
 		erro_anterior = erro
-	return lista_h, lista_u
-# --- Execucao das Simulacoes ---
-# Sintonia 1: Apenas Proporcional
-h_p, u_p = simular_separador(Kp=10.0, Ki=0.0, Kd=0.0)
-# Sintonia 2: PID Ajustado
-h_pid, u_pid = simular_separador(Kp=15.0, Ki=0.2, Kd=10.0)
-# --- Visualizacao dos Resultados (Padrao Monocromatico) ---
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-# Grafico de Nivel
-ax1.plot(tempo, h_p, label='Controle P (Offset)', color='black', linestyle='--')
-ax1.plot(tempo, h_pid, label='Controle PID (Robusto)', color='black', linestyle='-', linewidth=2)
-ax1.axhline(SP, color='black', linestyle=':', label='Setpoint')
-ax1.set_ylabel('Nível (m)')
-ax1.set_title('Controle de Nível sob Perturbação (Golfada de Entrada)')
-ax1.legend(loc='upper right')
-ax1.grid(True, alpha=0.3)
-# Grafico de Abertura de Valvula
-ax2.plot(tempo, u_p, color='black', linestyle='--', label='Saída P')
-ax2.plot(tempo, u_pid, color='black', linestyle='-', label='Saída PID')
-ax2.set_ylabel('Vazão de Saída (m³/s)')
-ax2.set_xlabel('Tempo (s)')
-ax2.axhline(U_MAX, color='black', linestyle='-.', label='Capacidade Máxima')
-ax2.legend(loc='lower right')
-ax2.grid(True, alpha=0.3)
-plt.tight_layout()
+	return lista_h, lista_q_in
+# --- Teste de Sintonia ---
+# 1. P Puro (com offset esperado devido a saida por gravidade)
+h_p, _ = simular_tanque_gravidade(Kp=0.8, Ki=0.0, Kd=0.0)
+# 2. PI (eliminando o offset)
+h_pi, _ = simular_tanque_gravidade(Kp=0.8, Ki=0.05, Kd=0.0)
+# 3. PID (melhorando o amortecimento)
+h_pid, q_pid = simular_tanque_gravidade(Kp=1.2, Ki=0.05, Kd=5.0)
+# --- Graficos (Padrao Monocromatico para impressao) ---
+plt.figure(figsize=(10, 6))
+plt.plot(tempo, h_p,   label='Proporcional (P)', color='black', linestyle='--')
+plt.plot(tempo, h_pi,  label='Proporcional-Integral (PI)', color='black', linestyle='-.')
+plt.plot(tempo, h_pid, label='PID Completo', color='black', linewidth=2)
+plt.axhline(SP, color='black', linestyle=':', label='Setpoint')
+plt.title('Controle de Nível: Saída por Gravidade (Não Linear)')
+plt.xlabel('Tempo (s)')
+plt.ylabel('Nível h(t)')
+plt.legend(loc='lower right')
+plt.grid(True, alpha=0.3)
 plt.show()
 

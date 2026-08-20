@@ -1,52 +1,71 @@
 # -*- coding: utf-8 -*-
 """
 
-1.10.8 Exercício Computacional: Controle de Interface em Separador Trifásico. - 57
+1.10.10 Exercício Computacional: Avaliação de Controladores com Saturaçã e 
+Anti-Windup - pág. 60
 
 """
 import numpy as np
 import matplotlib.pyplot as plt
-# --- Parametros do Sistema ---
-A, rho_o, rho_a = 5.0, 850.0, 1000.0
-ko, ka = 10.0, 12.0
-dt = 0.1
-tempo = np.arange(0, 400, dt)
-# Setpoints
-SP_ho = 0.8  # Interface oleo-agua
-SP_hL = 1.5  # Nivel total (liquido-gas)
-def simular_trifasico():
-	ho, hL = 0.7, 1.4 # Niveis iniciais
-	int_erro_o, int_erro_a = 0.0, 0.0
-	res_ho, res_hL = [], []
+# Parâmetros do processo
+a = 0.8
+b = 1.5
+dt = 0.05
+tempo = np.arange(0, 60, dt)
+# Saturação
+u_min, u_max = 0.0, 5.0
+# Controlador PI
+Kp = 2.0
+Ki = 0.8
+def simular(anti_windup=False):
+	y = 0.0
+	integral = 0.0
+	r = 3.0
+	hist_y = []
+	hist_u = []
 	for t in tempo:
-		# 1. Perturbacao: Aumento na entrada de agua em t=150s
-		m_in_o = 5.0
-		m_in_a = 4.0 if t < 150 else 9.0
-		# 2. Controladores PI (Independentes)
-		erro_o = SP_ho - ho
-		erro_a = SP_hL - hL
-		int_erro_o += erro_o * dt
-		int_erro_a += erro_a * dt
-		uo = np.clip(15.0 * erro_o + 0.5 * int_erro_o, 0, 100)
-		ua = np.clip(18.0 * erro_a + 0.6 * int_erro_a, 0, 100)
-		# 3. Dinamica das Interfaces (Tarefa 1)
-		dho_dt = (m_in_o - ko * uo / 10) / (rho_o * A)
-		dhL_dt = ((m_in_a - ka * ua / 10) / (rho_a * A)) + dho_dt
-		ho += dho_dt * dt
-		hL += dhL_dt * dt
-		res_ho.append(ho)
-		res_hL.append(hL)
-	return res_ho, res_hL
-# Execucao e Plotagem
-ho, hL = simular_trifasico()
-plt.figure(figsize=(10, 6))
-plt.plot(tempo, ho, label='Interface Óleo-Água ($h_o$)', color='black', linestyle='--')
-plt.plot(tempo, hL, label='Nível Total ($h_L$)', color='black', linewidth=2)
-plt.axvline(150, color='grey', linestyle=':', label='Perturbação na Água')
-plt.title('Controle Multivariável: Acoplamento em Separador Trifásico')
-plt.xlabel('Tempo (s)')
-plt.ylabel('Nível (m)')
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
+		# Perturbação em t = 20 s
+		dist = 1.0 if t > 20 else 0.0
+		erro = r - y
+		integral += erro * dt
+		u = Kp * erro + Ki * integral
+		# Aplicar saturação
+		u_sat = np.clip(u, u_min, u_max)
+		# Anti-windup por clamping
+		if anti_windup and (u != u_sat):
+			integral -= erro * dt
+		# Dinâmica do processo
+		dy = -a * y + b * u_sat + dist
+		y += dy * dt
+		hist_y.append(y)
+		hist_u.append(u_sat)
+	return np.array(hist_y), np.array(hist_u)
 
+# Simulações
+y_sem, u_sem = simular(anti_windup=False)
+y_com, u_com = simular(anti_windup=True)
+# Gráficos em preto e branco, diferenciando por estilo de linha
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+# Resposta do sistema
+ax1.plot(tempo, y_sem, label='Sem Anti-Windup',
+color='black', linestyle='--', linewidth=1.8)
+ax1.plot(tempo, y_com, label='Com Anti-Windup',
+color='black', linestyle='-', linewidth=1.5)
+ax1.set_ylabel('y(t)')
+ax1.set_title('Resposta do Sistema com e sem Anti-Windup')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Sinal de controle
+ax2.plot(tempo, u_sem, label='u(t) Sem Anti-Windup',
+color='black', linestyle='--', linewidth=1.8)
+ax2.plot(tempo, u_com, label='u(t) Com Anti-Windup',
+color='black', linestyle='-', linewidth=1.5)
+ax2.set_ylabel('u(t)')
+ax2.set_xlabel('Tempo (s)')
+ax2.set_title('Sinal de Controle com e sem Anti-Windup')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-4.9 Comparação Entre Diferentes Instrumentos de Vazão Usando 
-Python. - pág.191-195
+4.9 Comparação Entre Diferentes Instrumentos de Vazão Usando  Python. - pág.191-195
 
 """
 import numpy as np
